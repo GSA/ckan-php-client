@@ -1,0 +1,28 @@
+{
+    "name": "REI/ckan-php-client",
+    "description": "CKAN php client",
+    "minimum-stability": "dev",
+    "license": "GPL-3.0+",
+    "authors": [
+        {
+            "name": "Alex Perfilov",
+            "email": "alexandr.perfilov@reisystems.com"
+        }
+    ],
+    "autoload": {
+        "psr-0": {
+            "REI\\": "src/"
+        },
+        "classmap": [
+
+        ]
+    },
+    "require": {
+        "php": ">=5.4",
+        "ext-curl": "*",
+        "ext-json": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "3.7.x"
+    }
+}
