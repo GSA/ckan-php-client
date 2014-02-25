@@ -1,10 +1,15 @@
 <?php
 
+namespace CKAN\Core;
+
+use DateTime;
+use DateTimeZone;
+use Exception;
+
 /**
  * @author Alex Perfilov
  * @date   2/24/14
- * Inspired by
- * https://github.com/jeffreybarke/Ckan_client-PHP
+ * Inspired by https://github.com/jeffreybarke/Ckan_client-PHP
  */
 class CkanClient
 {
@@ -60,7 +65,7 @@ class CkanClient
         curl_setopt($this->ch, CURLOPT_FOLLOWLOCATION, true);
         // However, don't follow more than five Location: headers.
         curl_setopt($this->ch, CURLOPT_MAXREDIRS, 5);
-        // Automatically set the Referer: field in requests
+        // Automatically set the Referrer: field in requests
         // following a Location: redirect.
         curl_setopt($this->ch, CURLOPT_AUTOREFERER, true);
         // Return the transfer as a string instead of dumping to screen.
@@ -143,12 +148,14 @@ class CkanClient
         // If POST or PUT, add Authorization: header and request body
         if ($method === 'POST' || $method === 'PUT') {
             // We needs a key and some data, yo!
-            if (!($this->api_key && $data)) {
+            if (!$data) {
                 // throw exception
-                throw new Exception('Missing either an API key or POST data.');
+                throw new Exception('Missing POST data.');
             } else {
-                // Add Authorization: header.
-                $this->ch_headers[] = 'Authorization: ' . $this->api_key;
+                if ($this->api_key) {
+                    // Add Authorization: header.
+                    $this->ch_headers[] = 'Authorization: ' . $this->api_key;
+                }
                 // Add data to request body.
                 curl_setopt($this->ch, CURLOPT_POSTFIELDS, $data);
             }
@@ -160,7 +167,7 @@ class CkanClient
             if ($key !== false) {
                 unset($this->ch_headers[$key]);
             }
-            curl_setopt($this->ch, CURLOPT_POSTFIELDS, null);
+            curl_setopt($this->ch, CURLOPT_POSTFIELDS, $data);
         }
         // Set headers.
         curl_setopt($this->ch, CURLOPT_HTTPHEADER, $this->ch_headers);
@@ -173,7 +180,7 @@ class CkanClient
                 $this->http_status_codes[$info['http_code']]);
         }
 
-        return json_decode($response);
+        return $response;
     }
 
     /**

@@ -1,5 +1,5 @@
 {
-    "name": "REI/ckan-php-client",
+    "name": "CKAN/php-client",
     "description": "CKAN php client",
     "minimum-stability": "dev",
     "license": "GPL-3.0+",
@@ -11,14 +11,14 @@
     ],
     "autoload": {
         "psr-0": {
-            "REI\\": "src/"
+            "CKAN\\Core\\": "src/"
         },
         "classmap": [
 
         ]
     },
     "require": {
-        "php": ">=5.4",
+        "php": ">=5.4.17",
         "ext-curl": "*",
         "ext-json": "*"
     },
