@@ -25,6 +25,7 @@ class CkanClient
     private $api_key = null;
 
     /**
+     * cURL handler
      * @var resource
      */
     private $ch;
@@ -121,7 +122,7 @@ class CkanClient
     }
 
     /**
-     * Update a dataset (package).
+     * Update a dataset (package)
      * @param $data
      * @return mixed
      */
@@ -184,13 +185,10 @@ class CkanClient
     }
 
     /**
-     * Destructor
-     * Since it's possible to leave cURL open, this is the last chance to
-     * close it.
+     * Since it's possible to leave cURL open, this is the last chance to close it
      */
     public function __destruct()
     {
-        // Cleanup
         if ($this->ch) {
             curl_close($this->ch);
             unset($this->ch);

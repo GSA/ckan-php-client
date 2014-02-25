@@ -36,8 +36,7 @@ class OrganizationList
             die($ex->getMessage());
         }
 
-//        decode as array
-        if (null === $this->json = json_decode($json, true)) {
+        if (null === $this->json = json_decode($json, true)) { //decode as array
             die('Fatal: could not decode json');
         }
     }
@@ -53,10 +52,26 @@ class OrganizationList
         $organization = trim($organization);
         foreach ($this->json['taxonomies'] as $taxonomy) {
             if ($organization == trim($taxonomy['taxonomy']['Federal Agency'])) {
-                $return[] = $taxonomy['taxonomy']['term'];
+                $return[$taxonomy['taxonomy']['term']] = $taxonomy['taxonomy']['Sub Agency'] ? : $organization;
             }
         }
 
         return array_unique($return);
+    }
+
+    public function getTermFor($organization)
+    {
+        $term         = false;
+        $organization = trim($organization);
+        foreach ($this->json['taxonomies'] as $taxonomy) {
+            if ($organization == trim($taxonomy['taxonomy']['Federal Agency'])) {
+                if ('' == trim($taxonomy['taxonomy']['Sub Agency'])) {
+                    $term = $taxonomy['taxonomy']['term'];
+                    break;
+                }
+            }
+        }
+
+        return $term;
     }
 }
