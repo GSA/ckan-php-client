@@ -47,7 +47,7 @@ class OrganizationList
      */
     public function getTreeArrayFor($organization)
     {
-        $return = array();
+        $return = [];
 
         $organization = trim($organization);
         foreach ($this->json['taxonomies'] as $taxonomy) {
@@ -59,6 +59,10 @@ class OrganizationList
         return array_unique($return);
     }
 
+    /**
+     * @param $organization
+     * @return bool
+     */
     public function getTermFor($organization)
     {
         $term         = false;

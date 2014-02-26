@@ -10,6 +10,7 @@ use Exception;
  * @author Alex Perfilov
  * @date   2/24/14
  * Inspired by https://github.com/jeffreybarke/Ckan_client-PHP
+ * @link   http://docs.ckan.org/en/latest/api/
  */
 class CkanClient
 {
@@ -41,15 +42,16 @@ class CkanClient
      * HTTP status codes.
      * @var        array
      */
-    private $http_status_codes = array(
+    private $http_status_codes = [
         '200' => 'OK',
         '301' => 'Moved Permanently',
         '400' => 'Bad Request',
         '403' => 'Not Authorized',
         '404' => 'Not Found',
         '409' => 'Conflict (e.g. name already exists)',
+        '411' => 'Length required',
         '500' => 'Service Error'
-    );
+    ];
 
     /**
      * @param $api_url
@@ -92,49 +94,37 @@ class CkanClient
     private function set_headers()
     {
         $date             = new DateTime(null, new DateTimeZone('UTC'));
-        $this->ch_headers = array(
+        $this->ch_headers = [
             'Date: ' . $date->format('D, d M Y H:i:s') . ' GMT', // RFC 1123
             'Accept: application/json',
             'Accept-Charset: utf-8',
             'Accept-Encoding: gzip'
-        );
+        ];
+
+        if ($this->api_key) {
+            $this->ch_headers[] = 'Authorization: ' . $this->api_key;
+        }
     }
 
     /**
-     * Searches for packages satisfying a given search criteria
-     * @param $query
-     * @param int $rows
-     * @param int $start
-     * @return mixed
-     */
-    public function package_search($query, $rows = 100, $start = 0)
-    {
-        $solr_request = array(
-            'q'     => $query,
-            'rows'  => $rows,
-            'start' => $start,
-        );
-        $data         = json_encode($solr_request);
-
-        return $this->make_request('POST',
-            'action/package_search',
-            $data);
-    }
-
-    /**
-     * Update a dataset (package)
+     * Return a list of the site’s tags.
      * @param $data
      * @return mixed
+     * @link http://docs.ckan.org/en/latest/api/#ckan.logic.action.get.tag_list
+     *  Params:
+     *  query (string) – a tag name query to search for, if given only tags whose names contain this string will be returned (optional)
+     *  vocabulary_id (string) – the id or name of a vocabulary, if give only tags that belong to this vocabulary will be returned (optional)
+     *  all_fields (boolean) – return full tag dictionaries instead of just names (optional, default: False)
      */
-    public function package_update($data)
+    public function tag_list($data = null)
     {
-        return $this->make_request('PUT',
-            'action/package_update',
+        return $this->make_request('POST',
+            'action/tag_list',
             $data);
     }
 
     /**
-     * @param string $method // HTTP method (GET, PUT, POST)
+     * @param string $method // HTTP method (GET, POST)
      * @param string $uri    // URI fragment to CKAN resource
      * @param string $data   // Optional. String in JSON-format that will be in request body
      * @return mixed    // If success, either an array or object. Otherwise FALSE.
@@ -142,34 +132,23 @@ class CkanClient
      */
     private function make_request($method, $uri, $data = null)
     {
-        // Set cURL method.
-        curl_setopt($this->ch, CURLOPT_CUSTOMREQUEST, strtoupper($method));
+        $method = strtoupper($method);
+        if (!in_array($method, ['GET', 'POST'])) {
+            throw new Exception('Method ' . $method . ' is not supported');
+        }
         // Set cURL URI.
         curl_setopt($this->ch, CURLOPT_URL, $this->api_url . $uri);
-        // If POST or PUT, add Authorization: header and request body
-        if ($method === 'POST' || $method === 'PUT') {
-            // We needs a key and some data, yo!
-            if (!$data) {
-                // throw exception
-                throw new Exception('Missing POST data.');
+        if ($method === 'POST') {
+            if ($data) {
+                curl_setopt($this->ch, CURLOPT_POSTFIELDS, urlencode($data));
             } else {
-                if ($this->api_key) {
-                    // Add Authorization: header.
-                    $this->ch_headers[] = 'Authorization: ' . $this->api_key;
-                }
-                // Add data to request body.
-                curl_setopt($this->ch, CURLOPT_POSTFIELDS, $data);
+                $method = 'GET';
             }
-        } else {
-            // Since we can't use HTTPS,
-            // if it's in there, remove Authorization: header
-            $key = array_search('Authorization: ' . $this->api_key,
-                $this->ch_headers);
-            if ($key !== false) {
-                unset($this->ch_headers[$key]);
-            }
-            curl_setopt($this->ch, CURLOPT_POSTFIELDS, $data);
         }
+
+        // Set cURL method.
+        curl_setopt($this->ch, CURLOPT_CUSTOMREQUEST, $method);
+
         // Set headers.
         curl_setopt($this->ch, CURLOPT_HTTPHEADER, $this->ch_headers);
         // Execute request and get response headers.
@@ -182,6 +161,108 @@ class CkanClient
         }
 
         return $response;
+    }
+
+    /**
+     * Create a new vocabulary tag.
+     * @param $name
+     * @param null $vocabulary_id
+     * @return mixed
+     * @link     http://docs.ckan.org/en/latest/api/#ckan.logic.action.get.tag_list
+     *  Params:
+     *  name (string) – the name for the new tag, a string between 2 and 100 characters long containing only
+     *  alphanumeric characters and -, _ and ., e.g. 'Jazz'
+     *  vocabulary_id (string) – the name or id of the vocabulary that the new tag should be added to, e.g. 'Genre'
+     */
+    public function tag_create($name, $vocabulary_id)
+    {
+        $data = [
+            'name'          => $name,
+            'vocabulary_id' => $vocabulary_id,
+        ];
+        $data = json_encode($data, JSON_PRETTY_PRINT);
+
+        return $this->make_request('POST',
+            'action/tag_create',
+            $data);
+    }
+
+    /**
+     * Return a list of all the site’s tag vocabularies.
+     */
+    public function vocabulary_list()
+    {
+        return $this->make_request('GET', 'action/vocabulary_list');
+    }
+
+    /**
+     * Create a new tag vocabulary.
+     * @param $name
+     *  Params:
+     *  name (string) – the name for the new vocabulary, a string between 2 and 100 characters long containing only alphanumeric characters and -, _ and ., e.g. 'Jazz'
+     *  tags (list of tag dictionaries) – the new tags to add to the new vocabulary, for the format of tag dictionaries see tag_create()
+     * @return mixed
+     */
+    public function vocabulary_create($name)
+    {
+        $data = [
+            'name' => $name,
+        ];
+        $data = json_encode($data, JSON_PRETTY_PRINT);
+
+        return $this->make_request('POST',
+            'action/vocabulary_create',
+            $data);
+    }
+
+    /**
+     * Searches for packages satisfying a given search criteria
+     * @param $query
+     * @param int $rows
+     * @param int $start
+     * @return mixed
+     * @link http://docs.ckan.org/en/latest/api/index.html#ckan.logic.action.get.package_search
+     */
+    public function package_search($query = '', $rows = 100, $start = 0)
+    {
+        $solr_request = [
+            'q'     => $query,
+            'rows'  => $rows,
+            'start' => $start,
+        ];
+        $data         = json_encode($solr_request, JSON_PRETTY_PRINT);
+
+        return $this->make_request('POST',
+            'action/package_search',
+            $data);
+    }
+
+    /**
+     * Create a dataset (package)
+     * @param $data
+     * @return mixed
+     * @link http://docs.ckan.org/en/latest/api/index.html#ckan.logic.action.update.package_create
+     */
+    public function package_create($data)
+    {
+        return $this->make_request('POST',
+            'action/package_create',
+            $data);
+    }
+
+    /**
+     * Update a dataset (package)
+     * @param $data
+     * @return mixed
+     * @link http://docs.ckan.org/en/latest/api/index.html#ckan.logic.action.update.package_update
+     */
+    public function package_update(array $data)
+    {
+        $data = json_encode($data, JSON_PRETTY_PRINT);
+
+        return $this->make_request('POST',
+            'action/package_update',
+            $data);
     }
 
     /**
