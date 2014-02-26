@@ -48,15 +48,22 @@ class OrganizationList
     public function getTreeArrayFor($organization)
     {
         $return = [];
+        $parent = [];
 
         $organization = trim($organization);
         foreach ($this->json['taxonomies'] as $taxonomy) {
             if ($organization == trim($taxonomy['taxonomy']['Federal Agency'])) {
-                $return[$taxonomy['taxonomy']['term']] = $taxonomy['taxonomy']['Sub Agency'] ? : $organization;
+                if (!$taxonomy['taxonomy']['Sub Agency']) {
+//                    let's put parent agency first
+                    define('PARENT_TERM', $taxonomy['taxonomy']['term']);
+                    $parent[$taxonomy['taxonomy']['term']] = $organization;
+                } else {
+                    $return[$taxonomy['taxonomy']['term']] = $taxonomy['taxonomy']['Sub Agency'];
+                }
             }
         }
 
-        return array_unique($return);
+        return array_merge($parent, $return);
     }
 
     /**
