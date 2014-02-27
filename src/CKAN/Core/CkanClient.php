@@ -220,13 +220,14 @@ class CkanClient
      * @param $query
      * @param int $rows
      * @param int $start
+     * @param string $q (q/fq)
      * @return mixed
      * @link http://docs.ckan.org/en/latest/api/index.html#ckan.logic.action.get.package_search
      */
-    public function package_search($query = '', $rows = 100, $start = 0)
+    public function package_search($query = '', $rows = 100, $start = 0, $q = 'q')
     {
         $solr_request = [
-            'q'     => $query,
+            $q => $query,
             'rows'  => $rows,
             'start' => $start,
         ];
