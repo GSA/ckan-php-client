@@ -218,6 +218,24 @@ class CkanClient
 
     /**
      * Searches for packages satisfying a given search criteria
+     * @param string $id (id/name)
+     * @return mixed
+     * @link http://docs.ckan.org/en/latest/api/index.html#ckan.logic.action.get.package_show
+     */
+    public function package_show($id)
+    {
+        $solr_request = [
+            'id' => $id
+        ];
+        $data         = json_encode($solr_request, JSON_PRETTY_PRINT);
+
+        return $this->make_request('POST',
+            'action/package_show',
+            $data);
+    }
+
+    /**
+     * Searches for packages satisfying a given search criteria
      * @param $query
      * @param int $rows
      * @param int $start
@@ -228,7 +246,7 @@ class CkanClient
     public function package_search($query = '', $rows = 100, $start = 0, $q = 'q')
     {
         $solr_request = [
-            $q => $query,
+            $q     => $query,
             'rows'  => $rows,
             'start' => $start,
             'sort' => 'score desc, name asc'
