@@ -157,7 +157,7 @@ class CkanClient
         // Check HTTP response code
         if ($info['http_code'] !== 200) {
             throw new Exception($info['http_code'] . ': ' .
-                $this->http_status_codes[$info['http_code']]);
+                $this->http_status_codes[$info['http_code']] . PHP_EOL . $data . PHP_EOL);
         }
 
         return $response;
@@ -230,6 +230,7 @@ class CkanClient
             $q => $query,
             'rows'  => $rows,
             'start' => $start,
+            'sort' => 'score desc, name asc'
         ];
         $data         = json_encode($solr_request, JSON_PRETTY_PRINT);
 
