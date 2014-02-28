@@ -218,13 +218,20 @@ class CkanClient
 
     /**
      * Return a list of the names of the site’s groups.
+     * @param bool $all_fields
      * @return mixed
      * @link http://docs.ckan.org/en/latest/api/index.html#ckan.logic.action.get.group_list
      */
-    public function group_list()
+    public function group_list($all_fields = false)
     {
-        return $this->make_request('GET',
-            'action/group_list');
+        $solr_request = [
+            'all_fields' => $all_fields
+        ];
+        $data         = json_encode($solr_request, JSON_PRETTY_PRINT);
+
+        return $this->make_request('POST',
+            'action/group_list',
+            $data);
     }
 
     /**
