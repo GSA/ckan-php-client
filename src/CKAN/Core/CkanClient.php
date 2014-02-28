@@ -2,6 +2,7 @@
 
 namespace CKAN\Core;
 
+use CKAN\Exceptions\NotFoundHttpException;
 use DateTime;
 use DateTimeZone;
 use Exception;
@@ -157,8 +158,14 @@ class CkanClient
         $info     = curl_getinfo($this->ch);
         // Check HTTP response code
         if ($info['http_code'] !== 200) {
-            throw new Exception($info['http_code'] . ': ' .
-                $this->http_status_codes[$info['http_code']] . PHP_EOL . $data . PHP_EOL);
+            switch ($info['http_code']) {
+                case 404:
+                    throw new NotFoundHttpException($data);
+                    break;
+                default:
+                    throw new Exception($info['http_code'] . ': ' .
+                        $this->http_status_codes[$info['http_code']] . PHP_EOL . $data . PHP_EOL);
+            }
         }
 
         return $response;

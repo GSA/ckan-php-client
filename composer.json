@@ -11,7 +11,8 @@
     ],
     "autoload": {
         "psr-0": {
-            "CKAN\\Core\\": "src/"
+            "CKAN\\Core\\": "src/",
+            "CKAN\\Exceptions\\": "src/"
         },
         "classmap": [
 
