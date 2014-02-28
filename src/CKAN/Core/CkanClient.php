@@ -50,7 +50,8 @@ class CkanClient
         '404' => 'Not Found',
         '409' => 'Conflict (e.g. name already exists)',
         '411' => 'Length required',
-        '500' => 'Service Error'
+        '500' => 'Service Error',
+        '503' => 'Service unavailable (e.g. CKAN build in progress, or you are banned)'
     ];
 
     /**
