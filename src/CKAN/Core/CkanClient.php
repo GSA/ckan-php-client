@@ -217,6 +217,17 @@ class CkanClient
     }
 
     /**
+     * Return a list of the names of the site’s groups.
+     * @return mixed
+     * @link http://docs.ckan.org/en/latest/api/index.html#ckan.logic.action.get.group_list
+     */
+    public function group_list()
+    {
+        return $this->make_request('GET',
+            'action/group_list');
+    }
+
+    /**
      * Searches for packages satisfying a given search criteria
      * @param string $id (id/name)
      * @return mixed
