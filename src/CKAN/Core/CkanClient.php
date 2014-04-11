@@ -95,7 +95,7 @@ class CkanClient
      */
     private function set_headers()
     {
-        $date             = new DateTime(null, new DateTimeZone('UTC'));
+        $date = new DateTime(null, new DateTimeZone('UTC'));
         $this->ch_headers = [
             'Date: ' . $date->format('D, d M Y H:i:s') . ' GMT', // RFC 1123
             'Accept: application/json',
@@ -120,15 +120,17 @@ class CkanClient
      */
     public function tag_list($data = null)
     {
-        return $this->make_request('POST',
+        return $this->make_request(
+            'POST',
             'action/tag_list',
-            $data);
+            $data
+        );
     }
 
     /**
      * @param string $method // HTTP method (GET, POST)
-     * @param string $uri    // URI fragment to CKAN resource
-     * @param string $data   // Optional. String in JSON-format that will be in request body
+     * @param string $uri // URI fragment to CKAN resource
+     * @param string $data // Optional. String in JSON-format that will be in request body
      * @return mixed    // If success, either an array or object. Otherwise FALSE.
      * @throws Exception
      */
@@ -155,7 +157,7 @@ class CkanClient
         curl_setopt($this->ch, CURLOPT_HTTPHEADER, $this->ch_headers);
         // Execute request and get response headers.
         $response = curl_exec($this->ch);
-        $info     = curl_getinfo($this->ch);
+        $info = curl_getinfo($this->ch);
         // Check HTTP response code
         if ($info['http_code'] !== 200) {
             switch ($info['http_code']) {
@@ -163,8 +165,10 @@ class CkanClient
                     throw new NotFoundHttpException($data);
                     break;
                 default:
-                    throw new Exception($info['http_code'] . ': ' .
-                        $this->http_status_codes[$info['http_code']] . PHP_EOL . $data . PHP_EOL);
+                    throw new Exception(
+                        $info['http_code'] . ': ' .
+                        $this->http_status_codes[$info['http_code']] . PHP_EOL . $data . PHP_EOL
+                    );
             }
         }
 
@@ -190,9 +194,11 @@ class CkanClient
         ];
         $data = json_encode($data, JSON_PRETTY_PRINT);
 
-        return $this->make_request('POST',
+        return $this->make_request(
+            'POST',
             'action/tag_create',
-            $data);
+            $data
+        );
     }
 
     /**
@@ -218,9 +224,11 @@ class CkanClient
         ];
         $data = json_encode($data, JSON_PRETTY_PRINT);
 
-        return $this->make_request('POST',
+        return $this->make_request(
+            'POST',
             'action/vocabulary_create',
-            $data);
+            $data
+        );
     }
 
     /**
@@ -234,11 +242,13 @@ class CkanClient
         $solr_request = [
             'all_fields' => $all_fields
         ];
-        $data         = json_encode($solr_request, JSON_PRETTY_PRINT);
+        $data = json_encode($solr_request, JSON_PRETTY_PRINT);
 
-        return $this->make_request('POST',
+        return $this->make_request(
+            'POST',
             'action/group_list',
-            $data);
+            $data
+        );
     }
 
     /**
@@ -252,11 +262,13 @@ class CkanClient
         $solr_request = [
             'id' => $id
         ];
-        $data         = json_encode($solr_request, JSON_PRETTY_PRINT);
+        $data = json_encode($solr_request, JSON_PRETTY_PRINT);
 
-        return $this->make_request('POST',
+        return $this->make_request(
+            'POST',
             'action/package_show',
-            $data);
+            $data
+        );
     }
 
     /**
@@ -276,11 +288,13 @@ class CkanClient
             'start' => $start,
             'sort' => 'score desc, name asc'
         ];
-        $data         = json_encode($solr_request, JSON_PRETTY_PRINT);
+        $data = json_encode($solr_request, JSON_PRETTY_PRINT);
 
-        return $this->make_request('POST',
+        return $this->make_request(
+            'POST',
             'action/package_search',
-            $data);
+            $data
+        );
     }
 
     /**
@@ -291,9 +305,11 @@ class CkanClient
      */
     public function package_create($data)
     {
-        return $this->make_request('POST',
+        return $this->make_request(
+            'POST',
             'action/package_create',
-            $data);
+            $data
+        );
     }
 
     /**
@@ -306,9 +322,11 @@ class CkanClient
     {
         $data = json_encode($data, JSON_PRETTY_PRINT);
 
-        return $this->make_request('POST',
+        return $this->make_request(
+            'POST',
             'action/package_update',
-            $data);
+            $data
+        );
     }
 
     /**
