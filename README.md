@@ -24,7 +24,7 @@ Create a composer.json file for your project:
         "repositories": [
             {
                 "type": "git",
-                "url": "https://github.com/alex-perfilov-reisys/ckan-php-client.git"
+                "url": "https://github.com/GSA/ckan-php-client.git"
             }
         ],
         "require": {
@@ -57,5 +57,5 @@ Now you can add the autoloader, and you will have access to the library:
 
 ### Sample
 
-Check [alex-perfilov-reisys/ckan-php-manager](https://github.com/alex-perfilov-reisys/ckan-php-manager/)
+Check [GSA/ckan-php-manager](https://github.com/GSA/ckan-php-manager/)
 script as an example
