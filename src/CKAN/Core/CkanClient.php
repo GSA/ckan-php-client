@@ -272,6 +272,26 @@ class CkanClient
     }
 
     /**
+     * Returns organization with matching id or name
+     * @param string $id (id/name)
+     * @return mixed
+     * @link http://docs.ckan.org/en/latest/api/index.html#ckan.logic.action.get.organization_show
+     */
+    public function organization_show($id)
+    {
+        $solr_request = [
+            'id' => $id
+        ];
+        $data = json_encode($solr_request, JSON_PRETTY_PRINT);
+
+        return $this->make_request(
+            'POST',
+            'action/organization_show',
+            $data
+        );
+    }
+
+    /**
      * Searches for packages satisfying a given search criteria
      * @param $query
      * @param int $rows
