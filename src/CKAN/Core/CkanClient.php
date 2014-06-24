@@ -56,7 +56,7 @@ class CkanClient
     ];
 
     /**
-     * @param $api_url
+     * @param      $api_url
      * @param null $api_key
      */
     public function __construct($api_url, $api_key = null)
@@ -110,7 +110,9 @@ class CkanClient
 
     /**
      * Return a list of the site’s tags.
+     *
      * @param $data
+     *
      * @return mixed
      * @link http://docs.ckan.org/en/latest/api/#ckan.logic.action.get.tag_list
      *  Params:
@@ -129,8 +131,9 @@ class CkanClient
 
     /**
      * @param string $method // HTTP method (GET, POST)
-     * @param string $uri // URI fragment to CKAN resource
+     * @param string $uri  // URI fragment to CKAN resource
      * @param string $data // Optional. String in JSON-format that will be in request body
+     *
      * @return mixed    // If success, either an array or object. Otherwise FALSE.
      * @throws Exception
      */
@@ -177,8 +180,10 @@ class CkanClient
 
     /**
      * Create a new vocabulary tag.
-     * @param $name
+     *
+     * @param      $name
      * @param null $vocabulary_id
+     *
      * @return mixed
      * @link     http://docs.ckan.org/en/latest/api/#ckan.logic.action.get.tag_list
      *  Params:
@@ -211,10 +216,12 @@ class CkanClient
 
     /**
      * Create a new tag vocabulary.
+     *
      * @param $name
      *  Params:
      *  name (string) – the name for the new vocabulary, a string between 2 and 100 characters long containing only alphanumeric characters and -, _ and ., e.g. 'Jazz'
      *  tags (list of tag dictionaries) – the new tags to add to the new vocabulary, for the format of tag dictionaries see tag_create()
+     *
      * @return mixed
      */
     public function vocabulary_create($name)
@@ -233,7 +240,9 @@ class CkanClient
 
     /**
      * Return a list of the names of the site’s groups.
+     *
      * @param bool $all_fields
+     *
      * @return mixed
      * @link http://docs.ckan.org/en/latest/api/index.html#ckan.logic.action.get.group_list
      */
@@ -253,7 +262,9 @@ class CkanClient
 
     /**
      * Searches for packages satisfying a given search criteria
+     *
      * @param string $id (id/name)
+     *
      * @return mixed
      * @link http://docs.ckan.org/en/latest/api/index.html#ckan.logic.action.get.package_show
      */
@@ -273,7 +284,9 @@ class CkanClient
 
     /**
      * Returns organization with matching id or name
+     *
      * @param string $id (id/name)
+     *
      * @return mixed
      * @link http://docs.ckan.org/en/latest/api/index.html#ckan.logic.action.get.organization_show
      */
@@ -293,10 +306,12 @@ class CkanClient
 
     /**
      * Searches for packages satisfying a given search criteria
-     * @param $query
-     * @param int $rows
-     * @param int $start
+     *
+     * @param        $query
+     * @param int    $rows
+     * @param int    $start
      * @param string $q (q/fq)
+     *
      * @return mixed
      * @link http://docs.ckan.org/en/latest/api/index.html#ckan.logic.action.get.package_search
      */
@@ -308,7 +323,7 @@ class CkanClient
             'start' => $start,
             'sort' => 'score desc, name asc'
         ];
-        $data = json_encode($solr_request, JSON_PRETTY_PRINT);
+        $data         = json_encode($solr_request, JSON_PRETTY_PRINT);
 
         return $this->make_request(
             'POST',
@@ -318,8 +333,39 @@ class CkanClient
     }
 
     /**
+     * @param             $id
+     * @param string      $object_type ('user', 'package')
+     * @param string|bool $capacity    ('member', 'editor', 'admin', 'public', 'private')
+     *
+     * @return mixed
+     *
+     * @link http://docs.ckan.org/en/latest/api/#ckan.logic.action.get.member_list
+     */
+    public function member_list($id, $object_type = 'package', $capacity = false)
+    {
+        $solr_request = [
+            'id' => $id
+        ];
+        if ($object_type && ('none' != $object_type)) {
+            $solr_request['object_type'] = $object_type;
+        }
+        if ($capacity) {
+            $solr_request['capacity'] = $capacity;
+        }
+        $data = json_encode($solr_request, JSON_PRETTY_PRINT);
+
+        return $this->make_request(
+            'POST',
+            'action/member_list',
+            $data
+        );
+    }
+
+    /**
      * Create a dataset (package)
+     *
      * @param $data
+     *
      * @return mixed
      * @link http://docs.ckan.org/en/latest/api/index.html#ckan.logic.action.update.package_create
      */
@@ -334,7 +380,9 @@ class CkanClient
 
     /**
      * Update a dataset (package)
+     *
      * @param $data
+     *
      * @return mixed
      * @link http://docs.ckan.org/en/latest/api/index.html#ckan.logic.action.update.package_update
      */
