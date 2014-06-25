@@ -75,8 +75,8 @@ class CkanClient
         curl_setopt($this->ch, CURLOPT_AUTOREFERER, true);
         // Return the transfer as a string instead of dumping to screen.
         curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, true);
-        // If it takes more than 45 seconds, fail
-        curl_setopt($this->ch, CURLOPT_TIMEOUT, 45);
+        // If it takes more than 3 minutes, fail
+        curl_setopt($this->ch, CURLOPT_TIMEOUT, 60 * 3);
         // We don't want the header (use curl_getinfo())
         curl_setopt($this->ch, CURLOPT_HEADER, false);
         // Track the handle's request string
