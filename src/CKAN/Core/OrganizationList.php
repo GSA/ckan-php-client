@@ -170,6 +170,8 @@ class OrganizationList
             }
         }
 
+        sort($return);
+
         if ($rootAgency) {
             if (isset($return[$rootAgency])) {
                 $return = $return[$rootAgency];
