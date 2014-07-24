@@ -75,8 +75,8 @@ class CkanClient
         curl_setopt($this->ch, CURLOPT_AUTOREFERER, true);
         // Return the transfer as a string instead of dumping to screen.
         curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, true);
-        // If it takes more than 3 minutes, fail
-        curl_setopt($this->ch, CURLOPT_TIMEOUT, 60 * 3);
+        // If it takes more than 5 minutes => fail
+        curl_setopt($this->ch, CURLOPT_TIMEOUT, 60 * 5);
         // We don't want the header (use curl_getinfo())
         curl_setopt($this->ch, CURLOPT_HEADER, false);
         // Track the handle's request string
@@ -130,6 +130,23 @@ class CkanClient
     }
 
     /**
+     * @param $search
+     *
+     * @return mixed
+     */
+    public function api_resource_search($search)
+    {
+        http: //catalog.data.gov/api/search/resource?url=explore.data.gov&all_fields=1&limit=100
+
+        $query = http_build_query($search);
+
+        return $this->make_request(
+            'GET',
+            'http://catalog.data.gov/api/search/resource?all_fields=1&limit=100&' . $query
+        );
+    }
+
+    /**
      * @param string $method // HTTP method (GET, POST)
      * @param string $uri  // URI fragment to CKAN resource
      * @param string $data // Optional. String in JSON-format that will be in request body
@@ -144,7 +161,8 @@ class CkanClient
             throw new Exception('Method ' . $method . ' is not supported');
         }
         // Set cURL URI.
-        curl_setopt($this->ch, CURLOPT_URL, $this->api_url . $uri);
+        $url = strpos($uri, '//') ? $uri : $this->api_url . $uri;
+        curl_setopt($this->ch, CURLOPT_URL, $url);
         if ($method === 'POST') {
             if ($data) {
                 curl_setopt($this->ch, CURLOPT_POSTFIELDS, urlencode($data));
@@ -164,6 +182,9 @@ class CkanClient
         // Check HTTP response code
         if ($info['http_code'] !== 200) {
             switch ($info['http_code']) {
+                case 0:
+                    var_dump($info);
+                    break;
                 case 404:
                     throw new NotFoundHttpException($data);
                     break;
