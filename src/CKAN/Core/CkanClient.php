@@ -332,17 +332,18 @@ class CkanClient
      * @param int    $rows
      * @param int    $start
      * @param string $q (q/fq)
+     * @param string $sort
      *
      * @return mixed
      * @link http://docs.ckan.org/en/latest/api/index.html#ckan.logic.action.get.package_search
      */
-    public function package_search($query = '', $rows = 100, $start = 0, $q = 'q')
+    public function package_search($query = '', $rows = 100, $start = 0, $q = 'q', $sort = 'score desc, name asc')
     {
         $solr_request = [
             $q     => $query,
             'rows'  => $rows,
             'start' => $start,
-            'sort' => 'score desc, name asc'
+            'sort' => $sort
         ];
         $data         = json_encode($solr_request, JSON_PRETTY_PRINT);
 
