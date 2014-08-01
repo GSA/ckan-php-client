@@ -53,6 +53,12 @@ class OrganizationList
 
         $organization = trim($organization);
         foreach ($this->json['taxonomies'] as $taxonomy) {
+
+            if ($taxonomy['taxonomy']['unique id'] !== $taxonomy['taxonomy']['term']) {
+//                skip 3rd level children
+                continue;
+            }
+
             if ($organization == trim($taxonomy['taxonomy']['Federal Agency'])) {
                 if (!$taxonomy['taxonomy']['Sub Agency']) {
 //                    let's put parent agency first
@@ -77,11 +83,19 @@ class OrganizationList
         $term = false;
         $organization = trim($organization);
         foreach ($this->json['taxonomies'] as $taxonomy) {
+            if ($taxonomy['taxonomy']['unique id'] !== $taxonomy['taxonomy']['term']) {
+//                skip 3rd level children
+                continue;
+            }
             if ($organization == trim($taxonomy['taxonomy']['Federal Agency'])) {
                 if ('' == trim($taxonomy['taxonomy']['Sub Agency'])) {
                     $term = $taxonomy['taxonomy']['unique id'];
                     break;
                 }
+            }
+            if ($organization == trim($taxonomy['taxonomy']['Sub Agency'])) {
+                $term = $taxonomy['taxonomy']['unique id'];
+                break;
             }
         }
 
