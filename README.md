@@ -16,7 +16,7 @@ The recommended way to install is [through composer](https://getcomposer.org/dow
 
 And run these two commands to install it:
 
-    $ curl -sS https://getcomposer.org/installer | php
+    $ curl -sS https://getcomposer.org/installer | php -- --install-dir=bin
 
 Create a composer.json file for your project:
 
@@ -28,13 +28,13 @@ Create a composer.json file for your project:
             }
         ],
         "require": {
-            "rei/ckan-php-client": "dev-dev"
+            "CKAN/php-client": "dev-master"
         },
     }
 
-Refresh your dependencies:
+Install dependencies:
 
-    $ php composer.phar update
+    $ composer install
 
 Now you can add the autoloader, and you will have access to the library:
 
