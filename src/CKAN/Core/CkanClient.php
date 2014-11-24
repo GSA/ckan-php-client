@@ -148,7 +148,7 @@ class CkanClient
 
     /**
      * @param string $method // HTTP method (GET, POST)
-     * @param string $uri  // URI fragment to CKAN resource
+     * @param string $uri // URI fragment to CKAN resource
      * @param string $data // Optional. String in JSON-format that will be in request body
      *
      * @return mixed    // If success, either an array or object. Otherwise FALSE.
@@ -191,7 +191,7 @@ class CkanClient
                 default:
                     throw new Exception(
                         $info['http_code'] . ': ' .
-                        $this->http_status_codes[$info['http_code']] . PHP_EOL . $data . PHP_EOL
+                        $this->http_status_codes[$info['http_code']] . PHP_EOL . $data . PHP_EOL . $url . PHP_EOL
                     );
             }
         }
@@ -215,7 +215,7 @@ class CkanClient
     public function tag_create($name, $vocabulary_id)
     {
         $data = [
-            'name'          => $name,
+            'name' => $name,
             'vocabulary_id' => $vocabulary_id,
         ];
         $data = json_encode($data, JSON_PRETTY_PRINT);
@@ -329,8 +329,8 @@ class CkanClient
      * Searches for packages satisfying a given search criteria
      *
      * @param        $query
-     * @param int    $rows
-     * @param int    $start
+     * @param int $rows
+     * @param int $start
      * @param string $q (q/fq)
      * @param string $sort
      *
@@ -340,12 +340,12 @@ class CkanClient
     public function package_search($query = '', $rows = 100, $start = 0, $q = 'q', $sort = 'score desc, name asc')
     {
         $solr_request = [
-            $q     => $query,
-            'rows'  => $rows,
+            $q => $query,
+            'rows' => $rows,
             'start' => $start,
             'sort' => $sort
         ];
-        $data         = json_encode($solr_request, JSON_PRETTY_PRINT);
+        $data = json_encode($solr_request, JSON_PRETTY_PRINT);
 
         return $this->make_request(
             'POST',
@@ -356,8 +356,8 @@ class CkanClient
 
     /**
      * @param             $id
-     * @param string      $object_type ('user', 'package')
-     * @param string|bool $capacity    ('member', 'editor', 'admin', 'public', 'private')
+     * @param string $object_type ('user', 'package')
+     * @param string|bool $capacity ('member', 'editor', 'admin', 'public', 'private')
      *
      * @return mixed
      *
