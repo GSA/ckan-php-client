@@ -304,6 +304,22 @@ class CkanClient
     }
 
     /**
+     * Returns organization list
+     *
+     *
+     * @return mixed
+     * @link http://docs.ckan.org/en/latest/api/index.html#ckan.logic.action.get.organization_list
+     */
+    public function organization_list()
+    {
+
+        return $this->make_request(
+            'POST',
+            'action/organization_list'
+        );
+    }
+
+    /**
      * Returns organization with matching id or name
      *
      * @param string $id (id/name)
@@ -324,6 +340,28 @@ class CkanClient
             $data
         );
     }
+
+    /**
+     * Returns user with matching id or name
+     *
+     * @param string $id (id/name)
+     *
+     * @return mixed
+     * @link http://docs.ckan.org/en/latest/api/index.html#ckan.logic.action.get.user_show
+     */
+    public function user_show($id)
+    {
+        $solr_request = [
+            'id' => $id
+        ];
+        $data = json_encode($solr_request, JSON_PRETTY_PRINT);
+
+        return $this->make_request(
+            'POST',
+            'action/user_show',
+            $data
+        );
+    } 
 
     /**
      * Searches for packages satisfying a given search criteria
