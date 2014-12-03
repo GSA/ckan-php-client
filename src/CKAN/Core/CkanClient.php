@@ -100,7 +100,8 @@ class CkanClient
             'Date: ' . $date->format('D, d M Y H:i:s') . ' GMT', // RFC 1123
             'Accept: application/json',
             'Accept-Charset: utf-8',
-            'Accept-Encoding: gzip'
+            'Accept-Encoding: gzip',
+            'Cookie: auth_tkt=foo'
         ];
 
         if ($this->api_key) {
@@ -304,6 +305,22 @@ class CkanClient
     }
 
     /**
+     * Returns organization list
+     *
+     *
+     * @return mixed
+     * @link http://docs.ckan.org/en/latest/api/index.html#ckan.logic.action.get.organization_list
+     */
+    public function organization_list()
+    {
+
+        return $this->make_request(
+            'POST',
+            'action/organization_list'
+        );
+    }
+
+    /**
      * Returns organization with matching id or name
      *
      * @param string $id (id/name)
@@ -324,6 +341,28 @@ class CkanClient
             $data
         );
     }
+
+    /**
+     * Returns user with matching id or name
+     *
+     * @param string $id (id/name)
+     *
+     * @return mixed
+     * @link http://docs.ckan.org/en/latest/api/index.html#ckan.logic.action.get.user_show
+     */
+    public function user_show($id)
+    {
+        $solr_request = [
+            'id' => $id
+        ];
+        $data = json_encode($solr_request, JSON_PRETTY_PRINT);
+
+        return $this->make_request(
+            'POST',
+            'action/user_show',
+            $data
+        );
+    } 
 
     /**
      * Searches for packages satisfying a given search criteria
