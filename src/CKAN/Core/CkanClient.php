@@ -100,7 +100,8 @@ class CkanClient
             'Date: ' . $date->format('D, d M Y H:i:s') . ' GMT', // RFC 1123
             'Accept: application/json',
             'Accept-Charset: utf-8',
-            'Accept-Encoding: gzip'
+            'Accept-Encoding: gzip',
+            'Cookie: auth_tkt=foo'
         ];
 
         if ($this->api_key) {
