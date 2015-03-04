@@ -95,7 +95,7 @@ class CkanClient
      */
     private function set_headers()
     {
-        $date = new DateTime(null, new DateTimeZone('UTC'));
+        $date             = new DateTime(null, new DateTimeZone('UTC'));
         $this->ch_headers = [
             'Date: ' . $date->format('D, d M Y H:i:s') . ' GMT', // RFC 1123
             'Accept: application/json',
@@ -117,9 +117,10 @@ class CkanClient
      * @return mixed
      * @link http://docs.ckan.org/en/latest/api/#ckan.logic.action.get.tag_list
      *  Params:
-     *  query (string) – a tag name query to search for, if given only tags whose names contain this string will be returned (optional)
-     *  vocabulary_id (string) – the id or name of a vocabulary, if give only tags that belong to this vocabulary will be returned (optional)
-     *  all_fields (boolean) – return full tag dictionaries instead of just names (optional, default: False)
+     *  query (string) – a tag name query to search for, if given only tags whose names contain this string will be
+     *     returned (optional) vocabulary_id (string) – the id or name of a vocabulary, if give only tags that belong
+     *     to this vocabulary will be returned (optional) all_fields (boolean) – return full tag dictionaries instead
+     *     of just names (optional, default: False)
      */
     public function tag_list($data = null)
     {
@@ -179,7 +180,7 @@ class CkanClient
         curl_setopt($this->ch, CURLOPT_HTTPHEADER, $this->ch_headers);
         // Execute request and get response headers.
         $response = curl_exec($this->ch);
-        $info = curl_getinfo($this->ch);
+        $info     = curl_getinfo($this->ch);
         // Check HTTP response code
         if ($info['http_code'] !== 200) {
             switch ($info['http_code']) {
@@ -216,7 +217,7 @@ class CkanClient
     public function tag_create($name, $vocabulary_id)
     {
         $data = [
-            'name' => $name,
+            'name'          => $name,
             'vocabulary_id' => $vocabulary_id,
         ];
         $data = json_encode($data, JSON_PRETTY_PRINT);
@@ -241,8 +242,9 @@ class CkanClient
      *
      * @param $name
      *  Params:
-     *  name (string) – the name for the new vocabulary, a string between 2 and 100 characters long containing only alphanumeric characters and -, _ and ., e.g. 'Jazz'
-     *  tags (list of tag dictionaries) – the new tags to add to the new vocabulary, for the format of tag dictionaries see tag_create()
+     *  name (string) – the name for the new vocabulary, a string between 2 and 100 characters long containing only
+     *     alphanumeric characters and -, _ and ., e.g. 'Jazz' tags (list of tag dictionaries) – the new tags to add to
+     *     the new vocabulary, for the format of tag dictionaries see tag_create()
      *
      * @return mixed
      */
@@ -273,7 +275,7 @@ class CkanClient
         $solr_request = [
             'all_fields' => $all_fields
         ];
-        $data = json_encode($solr_request, JSON_PRETTY_PRINT);
+        $data         = json_encode($solr_request, JSON_PRETTY_PRINT);
 
         return $this->make_request(
             'POST',
@@ -295,7 +297,7 @@ class CkanClient
         $solr_request = [
             'id' => $id
         ];
-        $data = json_encode($solr_request, JSON_PRETTY_PRINT);
+        $data         = json_encode($solr_request, JSON_PRETTY_PRINT);
 
         return $this->make_request(
             'POST',
@@ -333,7 +335,7 @@ class CkanClient
         $solr_request = [
             'id' => $id
         ];
-        $data = json_encode($solr_request, JSON_PRETTY_PRINT);
+        $data         = json_encode($solr_request, JSON_PRETTY_PRINT);
 
         return $this->make_request(
             'POST',
@@ -355,14 +357,14 @@ class CkanClient
         $solr_request = [
             'id' => $id
         ];
-        $data = json_encode($solr_request, JSON_PRETTY_PRINT);
+        $data         = json_encode($solr_request, JSON_PRETTY_PRINT);
 
         return $this->make_request(
             'POST',
             'action/user_show',
             $data
         );
-    } 
+    }
 
     /**
      * Searches for packages satisfying a given search criteria
@@ -379,12 +381,12 @@ class CkanClient
     public function package_search($query = '', $rows = 100, $start = 0, $q = 'q', $sort = 'score desc, name asc')
     {
         $solr_request = [
-            $q => $query,
-            'rows' => $rows,
+            $q      => $query,
+            'rows'  => $rows,
             'start' => $start,
-            'sort' => $sort
+            'sort'  => $sort
         ];
-        $data = json_encode($solr_request, JSON_PRETTY_PRINT);
+        $data         = json_encode($solr_request, JSON_PRETTY_PRINT);
 
         return $this->make_request(
             'POST',

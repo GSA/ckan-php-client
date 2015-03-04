@@ -80,7 +80,7 @@ class OrganizationList
      */
     public function getTermFor($organization)
     {
-        $term = false;
+        $term         = false;
         $organization = trim($organization);
         foreach ($this->json['taxonomies'] as $taxonomy) {
             if ($taxonomy['taxonomy']['unique id'] !== $taxonomy['taxonomy']['term']) {
