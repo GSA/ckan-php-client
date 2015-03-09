@@ -83,6 +83,7 @@ class CkanClient
         curl_setopt($this->ch, CURLINFO_HEADER_OUT, true);
         // Attempt to retrieve the modification date of the remote document.
         curl_setopt($this->ch, CURLOPT_FILETIME, true);
+        curl_setopt($this->ch, CURLOPT_SSL_VERIFYPEER, false);
         // Initialize cURL headers
         $this->set_headers();
     }
@@ -128,23 +129,6 @@ class CkanClient
             'POST',
             'action/tag_list',
             $data
-        );
-    }
-
-    /**
-     * @param $search
-     *
-     * @return mixed
-     */
-    public function api_resource_search($search)
-    {
-        http: //catalog.data.gov/api/search/resource?url=explore.data.gov&all_fields=1&limit=100
-
-        $query = http_build_query($search);
-
-        return $this->make_request(
-            'GET',
-            'http://catalog.data.gov/api/search/resource?all_fields=1&limit=100&' . $query
         );
     }
 
@@ -199,6 +183,23 @@ class CkanClient
         }
 
         return $response;
+    }
+
+    /**
+     * @param $search
+     *
+     * @return mixed
+     */
+    public function api_resource_search($search)
+    {
+        http: //catalog.data.gov/api/search/resource?url=explore.data.gov&all_fields=1&limit=100
+
+        $query = http_build_query($search);
+
+        return $this->make_request(
+            'GET',
+            'http://catalog.data.gov/api/search/resource?all_fields=1&limit=100&' . $query
+        );
     }
 
     /**
@@ -362,6 +363,30 @@ class CkanClient
         return $this->make_request(
             'POST',
             'action/user_show',
+            $data
+        );
+    }
+
+    /**
+     * @param $id
+     *
+     * @return mixed
+     *
+     * @link http://docs.ckan.org/en/latest/api/index.html#ckan.logic.action.delete.package_delete
+     *
+     * @throws \CKAN\Exceptions\NotFoundHttpException
+     * @throws \Exception
+     */
+    public function package_delete($id)
+    {
+        $solr_request = [
+            'id' => $id,
+        ];
+        $data         = json_encode($solr_request, JSON_PRETTY_PRINT);
+
+        return $this->make_request(
+            'POST',
+            'action/package_delete',
             $data
         );
     }
