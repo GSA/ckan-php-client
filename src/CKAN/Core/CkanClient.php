@@ -111,23 +111,20 @@ class CkanClient
     }
 
     /**
-     * Return a list of the site’s tags.
-     *
-     * @param $data
+     * @param $resource
      *
      * @return mixed
-     * @link http://docs.ckan.org/en/latest/api/#ckan.logic.action.get.tag_list
-     *  Params:
-     *  query (string) – a tag name query to search for, if given only tags whose names contain this string will be
-     *     returned (optional) vocabulary_id (string) – the id or name of a vocabulary, if give only tags that belong
-     *     to this vocabulary will be returned (optional) all_fields (boolean) – return full tag dictionaries instead
-     *     of just names (optional, default: False)
+     * @throws \CKAN\Exceptions\NotFoundHttpException
+     * @throws \Exception
+     * @link http://docs.ckan.org/en/latest/api/#ckan.logic.action.create.resource_create
      */
-    public function tag_list($data = null)
+    public function resource_create($resource)
     {
+        $data = json_encode($resource, JSON_PRETTY_PRINT);
+
         return $this->make_request(
             'POST',
-            'action/tag_list',
+            'action/resource_create',
             $data
         );
     }
@@ -183,6 +180,28 @@ class CkanClient
         }
 
         return $response;
+    }
+
+    /**
+     * Return a list of the site’s tags.
+     *
+     * @param $data
+     *
+     * @return mixed
+     * @link http://docs.ckan.org/en/latest/api/#ckan.logic.action.get.tag_list
+     *  Params:
+     *  query (string) – a tag name query to search for, if given only tags whose names contain this string will be
+     *     returned (optional) vocabulary_id (string) – the id or name of a vocabulary, if give only tags that belong
+     *     to this vocabulary will be returned (optional) all_fields (boolean) – return full tag dictionaries instead
+     *     of just names (optional, default: False)
+     */
+    public function tag_list($data = null)
+    {
+        return $this->make_request(
+            'POST',
+            'action/tag_list',
+            $data
+        );
     }
 
     /**
