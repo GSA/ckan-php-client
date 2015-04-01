@@ -30,7 +30,7 @@ class OrganizationList
         }
 
         try {
-            $json = file_get_contents($this->jsonUrl);
+            $json = $this->get($this->jsonUrl);
         } catch (Exception $ex) {
             echo('Fatal: could not get organization list from json ' . $this->jsonUrl . PHP_EOL);
             die($ex->getMessage());
@@ -39,6 +39,16 @@ class OrganizationList
         if (null === $this->json = json_decode($json, true)) { //decode as array
             die('Fatal: could not decode json');
         }
+    }
+
+    /**
+     * for easier testing __constructor
+     * @param $url
+     * @return string
+     */
+    private function get($url)
+    {
+        return file_get_contents($url);
     }
 
     /**

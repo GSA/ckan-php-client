@@ -6,9 +6,6 @@
  * Time: 4:38 PM
  */
 
-namespace CKAN\Client;
-
-
 class CkanClientTest extends \BaseTestCase {
 
     public function setUp()

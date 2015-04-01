@@ -4,6 +4,7 @@ abstract class BaseTestCase extends \PHPUnit_Framework_TestCase
 {
     protected $testClass;
 
+    /** @var  \ReflectionClass */
     protected $reflection;
 
     public function setUp()
