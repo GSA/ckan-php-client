@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/GSA/ckan-php-client.svg)](https://travis-ci.org/GSA/ckan-php-client)
+
 ckan-php-client
 ===============
 
