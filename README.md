@@ -3,6 +3,8 @@
 ckan-php-client
 ===============
 
+[![Join the chat at https://gitter.im/GSA/ckan-php-client](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/GSA/ckan-php-client?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 ## API DOCs
 
 http://docs.ckan.org/en/latest/api/index.html
