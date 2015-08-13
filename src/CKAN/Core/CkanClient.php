@@ -96,7 +96,7 @@ class CkanClient
      */
     private function set_headers()
     {
-        $date             = new DateTime(null, new DateTimeZone('UTC'));
+        $date = new DateTime(null, new DateTimeZone('UTC'));
         $this->ch_headers = [
             'Date: ' . $date->format('D, d M Y H:i:s') . ' GMT', // RFC 1123
             'Accept: application/json',
@@ -161,7 +161,7 @@ class CkanClient
         curl_setopt($this->ch, CURLOPT_HTTPHEADER, $this->ch_headers);
         // Execute request and get response headers.
         $response = curl_exec($this->ch);
-        $info     = curl_getinfo($this->ch);
+        $info = curl_getinfo($this->ch);
         // Check HTTP response code
         if ($info['http_code'] !== 200) {
             switch ($info['http_code']) {
@@ -295,7 +295,7 @@ class CkanClient
         $solr_request = [
             'all_fields' => $all_fields
         ];
-        $data         = json_encode($solr_request, JSON_PRETTY_PRINT);
+        $data = json_encode($solr_request, JSON_PRETTY_PRINT);
 
         return $this->make_request(
             'POST',
@@ -317,7 +317,7 @@ class CkanClient
         $solr_request = [
             'id' => $id
         ];
-        $data         = json_encode($solr_request, JSON_PRETTY_PRINT);
+        $data = json_encode($solr_request, JSON_PRETTY_PRINT);
 
         return $this->make_request(
             'POST',
@@ -355,7 +355,7 @@ class CkanClient
         $solr_request = [
             'id' => $id
         ];
-        $data         = json_encode($solr_request, JSON_PRETTY_PRINT);
+        $data = json_encode($solr_request, JSON_PRETTY_PRINT);
 
         return $this->make_request(
             'POST',
@@ -377,7 +377,7 @@ class CkanClient
         $solr_request = [
             'id' => $id
         ];
-        $data         = json_encode($solr_request, JSON_PRETTY_PRINT);
+        $data = json_encode($solr_request, JSON_PRETTY_PRINT);
 
         return $this->make_request(
             'POST',
@@ -401,7 +401,7 @@ class CkanClient
         $solr_request = [
             'id' => $id,
         ];
-        $data         = json_encode($solr_request, JSON_PRETTY_PRINT);
+        $data = json_encode($solr_request, JSON_PRETTY_PRINT);
 
         return $this->make_request(
             'POST',
@@ -413,24 +413,25 @@ class CkanClient
     /**
      * Searches for packages satisfying a given search criteria
      *
-     * @param        $query
+     * @param        $q
+     * @param        $fq
      * @param int $rows
      * @param int $start
-     * @param string $q (q/fq)
      * @param string $sort
      *
      * @return mixed
      * @link http://docs.ckan.org/en/latest/api/index.html#ckan.logic.action.get.package_search
      */
-    public function package_search($query = '', $rows = 100, $start = 0, $q = 'q', $sort = 'score desc, name asc')
+    public function package_search($q = '', $fq = '', $rows = 100, $start = 0, $sort = 'score desc, name asc')
     {
         $solr_request = [
-            $q      => $query,
+            'q'     => $q,
+            'fq'    => $fq,
             'rows'  => $rows,
             'start' => $start,
             'sort'  => $sort
         ];
-        $data         = json_encode($solr_request, JSON_PRETTY_PRINT);
+        $data = json_encode($solr_request, JSON_PRETTY_PRINT);
 
         return $this->make_request(
             'POST',
