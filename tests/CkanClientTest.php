@@ -8,6 +8,14 @@
 
 class CkanClientTest extends \BaseTestCase {
 
+    /**
+     * @var \CKAN\CkanClient
+     */
+    private $CkanClient;
+
+    /**
+     *
+     */
     public function setUp()
     {
         $this->CkanClient = $this->getMockBuilder('CkanClient')
@@ -17,6 +25,9 @@ class CkanClientTest extends \BaseTestCase {
 //        parent::setup();
     }
 
+    /**
+     *
+     */
     public function testSetHeaders()
     {
         $this->assertTrue(true);

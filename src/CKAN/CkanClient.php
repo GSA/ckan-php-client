@@ -2,7 +2,6 @@
 
 namespace CKAN;
 
-use CKAN\NotFoundHttpException;
 use DateTime;
 use DateTimeZone;
 use Exception;

@@ -2,7 +2,7 @@
 
 class OrganizationListTest extends \BaseTestCase
 {
-    /** @var  \PHPUnit_Framework_MockObject_MockObject */
+    /** @var  PHPUnit_Framework_MockObject_MockObject */
     private $mock;
 
     public function setUp()
