@@ -1,6 +1,6 @@
 <?php
 
-namespace CKAN\Core;
+namespace CKAN;
 
 use Exception;
 

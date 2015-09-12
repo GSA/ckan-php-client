@@ -13,8 +13,7 @@
   ],
   "autoload": {
     "psr-0": {
-      "CKAN\\": "src/Core/",
-      "CKAN\\Exceptions\\": "src/"
+      "CKAN": "src/"
     }
   },
   "prefer-stable": true,

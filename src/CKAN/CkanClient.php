@@ -1,8 +1,8 @@
 <?php
 
-namespace CKAN\Core;
+namespace CKAN;
 
-use CKAN\Exceptions\NotFoundHttpException;
+use CKAN\NotFoundHttpException;
 use DateTime;
 use DateTimeZone;
 use Exception;
@@ -114,7 +114,7 @@ class CkanClient
      * @param $resource
      *
      * @return mixed
-     * @throws \CKAN\Exceptions\NotFoundHttpException
+     * @throws \CKAN\NotFoundHttpException
      * @throws \Exception
      * @link http://docs.ckan.org/en/latest/api/#ckan.logic.action.create.resource_create
      */
@@ -393,7 +393,7 @@ class CkanClient
      *
      * @link http://docs.ckan.org/en/latest/api/index.html#ckan.logic.action.delete.package_delete
      *
-     * @throws \CKAN\Exceptions\NotFoundHttpException
+     * @throws \CKAN\NotFoundHttpException
      * @throws \Exception
      */
     public function package_delete($id)

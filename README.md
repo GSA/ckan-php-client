@@ -32,7 +32,7 @@ Create a composer.json file for your project:
             }
         ],
         "require": {
-            "CKAN/php-client": "dev-master"
+            "gsa/ckan-php-client": "0.*"
         },
     }
 
@@ -49,7 +49,7 @@ Now you can add the autoloader, and you will have access to the library:
 
     <?php
 
-    use CKAN\Core\CkanClient;
+    use CKAN\CkanClient;
 
     $apiUrl = 'http://catalog.data.gov/api/3';          // CKAN API URL
     $apiKey = 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx';   // CKAN API KEY, if needed / or null

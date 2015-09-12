@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by IntelliJ IDEA.
- * User: alexandr.perfilov
- * Date: 3/31/15
- * Time: 11:08 PM
- */
-//use CKAN\Core\OrganizationList as OrganizationList;
 
 class OrganizationListTest extends \BaseTestCase
 {
@@ -14,7 +7,7 @@ class OrganizationListTest extends \BaseTestCase
 
     public function setUp()
     {
-        $this->testClass = 'CKAN\Core\OrganizationList';
+        $this->testClass = 'CKAN\OrganizationList';
         parent::setUp();
         $this->mock = $this->getMockBuilder($this->testClass)
             ->disableOriginalConstructor()
