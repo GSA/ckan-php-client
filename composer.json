@@ -1,8 +1,9 @@
 {
-  "name": "CKAN/php-client",
-  "description": "CKAN php client",
+  "name": "gsa/ckan-php-client",
+  "description": "CKAN php client by GSA",
   "minimum-stability": "dev",
   "license": "GPL-3.0+",
+  "type": "library",
   "authors": [
     {
       "name": "Alex Perfilov",
@@ -12,17 +13,15 @@
   ],
   "autoload": {
     "psr-0": {
-      "CKAN\\Core\\": "src/",
+      "CKAN\\": "src/Core/",
       "CKAN\\Exceptions\\": "src/"
-    },
-    "classmap": [
-    ]
+    }
   },
   "prefer-stable": true,
   "require": {
     "php": ">=5.4.17",
     "ext-curl": "*",
     "ext-json": "*",
-    "phpunit/phpunit": "*"
+    "phpunit/phpunit": "~4.0"
   }
 }
