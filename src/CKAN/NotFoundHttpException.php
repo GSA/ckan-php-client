@@ -4,14 +4,14 @@
  * @date   2/28/14
  */
 
-namespace CKAN\Exceptions;
+namespace CKAN;
 
 
 /**
  * Class NotFoundHttpException
- * @package CKAN\Exceptions
+ * @package CKAN
  */
 class NotFoundHttpException extends HttpException
 {
 
-} 
+}

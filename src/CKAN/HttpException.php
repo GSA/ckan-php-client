@@ -4,14 +4,14 @@
  * @date   2/28/14
  */
 
-namespace CKAN\Exceptions;
+namespace CKAN;
 
 
 /**
  * Class HttpException
- * @package CKAN\Exceptions
+ * @package CKAN
  */
 class HttpException extends \Exception
 {
 
-} 
+}
