@@ -22,6 +22,7 @@ class OrganizationList
 
     /**
      * @param null $jsonUrl
+     * @throws Exception
      */
     public function __construct($jsonUrl = null)
     {
@@ -32,12 +33,11 @@ class OrganizationList
         try {
             $json = $this->get($this->jsonUrl);
         } catch (Exception $ex) {
-            echo('Fatal: could not get organization list from json ' . $this->jsonUrl . PHP_EOL);
-            die($ex->getMessage());
+            throw Exception('Fatal: could not get organization list from json ' . $this->jsonUrl . PHP_EOL);
         }
 
         if (null === $this->json = json_decode($json, true)) { //decode as array
-            die('Fatal: could not decode json');
+            throw Exception('Fatal: could not decode json');
         }
     }
 
@@ -90,7 +90,7 @@ class OrganizationList
      */
     public function getTermFor($organization)
     {
-        $term         = false;
+        $term = false;
         $organization = trim($organization);
         foreach ($this->json['taxonomies'] as $taxonomy) {
             if ($taxonomy['taxonomy']['unique id'] !== $taxonomy['taxonomy']['term']) {
@@ -119,7 +119,7 @@ class OrganizationList
      */
     public function getTreeArray($rootAgency = null)
     {
-        $return     = [];
+        $return = [];
         $taxonomies = [];
 
         /**
@@ -130,8 +130,8 @@ class OrganizationList
             unset($taxonomy['taxonomy']['term']);
 
             $taxonomy['taxonomy']['Federal Agency'] = trim($taxonomy['taxonomy']['Federal Agency']);
-            $taxonomy['taxonomy']['Sub Agency']     = trim($taxonomy['taxonomy']['Sub Agency']);
-            $taxonomy['taxonomy']['id']             = trim($taxonomy['taxonomy']['unique id']);
+            $taxonomy['taxonomy']['Sub Agency'] = trim($taxonomy['taxonomy']['Sub Agency']);
+            $taxonomy['taxonomy']['id'] = trim($taxonomy['taxonomy']['unique id']);
 
             if (!$taxonomy['taxonomy']['Federal Agency'] || !$taxonomy['taxonomy']['id']) {
                 continue;
