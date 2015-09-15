@@ -4,10 +4,6 @@ namespace CKAN;
 
 use Exception;
 
-/**
- * @author Alex Perfilov
- * @date   2/20/14
- */
 class OrganizationList
 {
     /**
@@ -88,7 +84,7 @@ class OrganizationList
     /**
      * @param $organization
      *
-     * @return bool
+     * @return bool|array
      */
     public function getTermFor($organization)
     {
