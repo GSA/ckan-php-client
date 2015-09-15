@@ -1,8 +1,8 @@
-[![Build Status](https://travis-ci.org/GSA/ckan-php-client.svg)](https://travis-ci.org/GSA/ckan-php-client)
-
 ckan-php-client
 ===============
 
+[![Build Status](https://travis-ci.org/GSA/ckan-php-client.svg)](https://travis-ci.org/GSA/ckan-php-client)
+[![Codacy Badge](https://api.codacy.com/project/badge/d052803756de41bfa51ef9a4d080a5da)](https://www.codacy.com/app/alexandr-perfilov/ckan-php-client)
 [![Join the chat at https://gitter.im/GSA/ckan-php-client](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/GSA/ckan-php-client?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 ## API DOCs
