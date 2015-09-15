@@ -29,14 +29,14 @@ class CkanClient
      * cURL handler
      * @var resource
      */
-    private $ch;
+    private $curl_handler;
 
 
     /**
      * cURL headers
      * @var array
      */
-    private $ch_headers;
+    private $curl_headers;
 
     /**
      * HTTP status codes.
@@ -64,25 +64,25 @@ class CkanClient
         $this->api_key = $api_key;
 
         // Create cURL object.
-        $this->ch = curl_init();
+        $this->curl_handler = curl_init();
         // Follow any Location: headers that the server sends.
-        curl_setopt($this->ch, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($this->curl_handler, CURLOPT_FOLLOWLOCATION, true);
         // However, don't follow more than five Location: headers.
-        curl_setopt($this->ch, CURLOPT_MAXREDIRS, 5);
+        curl_setopt($this->curl_handler, CURLOPT_MAXREDIRS, 5);
         // Automatically set the Referrer: field in requests
         // following a Location: redirect.
-        curl_setopt($this->ch, CURLOPT_AUTOREFERER, true);
+        curl_setopt($this->curl_handler, CURLOPT_AUTOREFERER, true);
         // Return the transfer as a string instead of dumping to screen.
-        curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($this->curl_handler, CURLOPT_RETURNTRANSFER, true);
         // If it takes more than 5 minutes => fail
-        curl_setopt($this->ch, CURLOPT_TIMEOUT, 60 * 5);
+        curl_setopt($this->curl_handler, CURLOPT_TIMEOUT, 60 * 5);
         // We don't want the header (use curl_getinfo())
-        curl_setopt($this->ch, CURLOPT_HEADER, false);
+        curl_setopt($this->curl_handler, CURLOPT_HEADER, false);
         // Track the handle's request string
-        curl_setopt($this->ch, CURLINFO_HEADER_OUT, true);
+        curl_setopt($this->curl_handler, CURLINFO_HEADER_OUT, true);
         // Attempt to retrieve the modification date of the remote document.
-        curl_setopt($this->ch, CURLOPT_FILETIME, true);
-        curl_setopt($this->ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($this->curl_handler, CURLOPT_FILETIME, true);
+        curl_setopt($this->curl_handler, CURLOPT_SSL_VERIFYPEER, false);
         // Initialize cURL headers
         $this->set_headers();
     }
@@ -96,7 +96,7 @@ class CkanClient
     private function set_headers()
     {
         $date = new DateTime(null, new DateTimeZone('UTC'));
-        $this->ch_headers = [
+        $this->curl_headers = [
             'Date: ' . $date->format('D, d M Y H:i:s') . ' GMT', // RFC 1123
             'Accept: application/json',
             'Accept-Charset: utf-8',
@@ -105,7 +105,7 @@ class CkanClient
         ];
 
         if ($this->api_key) {
-            $this->ch_headers[] = 'Authorization: ' . $this->api_key;
+            $this->curl_headers[] = 'Authorization: ' . $this->api_key;
         }
     }
 
@@ -144,23 +144,21 @@ class CkanClient
         }
         // Set cURL URI.
         $url = strpos($uri, '//') ? $uri : $this->api_url . $uri;
-        curl_setopt($this->ch, CURLOPT_URL, $url);
-        if ($method === 'POST') {
-            if ($data) {
-                curl_setopt($this->ch, CURLOPT_POSTFIELDS, urlencode($data));
-            } else {
-                $method = 'GET';
-            }
+        curl_setopt($this->curl_handler, CURLOPT_URL, $url);
+        if ($method === 'POST' && $data) {
+            curl_setopt($this->curl_handler, CURLOPT_POSTFIELDS, urlencode($data));
+        } else {
+            $method = 'GET';
         }
 
         // Set cURL method.
-        curl_setopt($this->ch, CURLOPT_CUSTOMREQUEST, $method);
+        curl_setopt($this->curl_handler, CURLOPT_CUSTOMREQUEST, $method);
 
         // Set headers.
-        curl_setopt($this->ch, CURLOPT_HTTPHEADER, $this->ch_headers);
+        curl_setopt($this->curl_handler, CURLOPT_HTTPHEADER, $this->curl_headers);
         // Execute request and get response headers.
-        $response = curl_exec($this->ch);
-        $info = curl_getinfo($this->ch);
+        $response = curl_exec($this->curl_handler);
+        $info = curl_getinfo($this->curl_handler);
         // Check HTTP response code
         if ($info['http_code'] !== 200) {
             switch ($info['http_code']) {
@@ -306,15 +304,15 @@ class CkanClient
     /**
      * Searches for packages satisfying a given search criteria
      *
-     * @param string $id (id/name)
+     * @param string $package_id (id/name)
      *
      * @return mixed
      * @link http://docs.ckan.org/en/latest/api/index.html#ckan.logic.action.get.package_show
      */
-    public function package_show($id)
+    public function package_show($package_id)
     {
         $solr_request = [
-            'id' => $id
+            'id' => $package_id
         ];
         $data = json_encode($solr_request, JSON_PRETTY_PRINT);
 
@@ -344,15 +342,15 @@ class CkanClient
     /**
      * Returns organization with matching id or name
      *
-     * @param string $id (id/name)
+     * @param string $organization_id (id/name)
      *
      * @return mixed
      * @link http://docs.ckan.org/en/latest/api/index.html#ckan.logic.action.get.organization_show
      */
-    public function organization_show($id)
+    public function organization_show($organization_id)
     {
         $solr_request = [
-            'id' => $id
+            'id' => $organization_id
         ];
         $data = json_encode($solr_request, JSON_PRETTY_PRINT);
 
@@ -366,15 +364,15 @@ class CkanClient
     /**
      * Returns user with matching id or name
      *
-     * @param string $id (id/name)
+     * @param string $user_id (id/name)
      *
      * @return mixed
      * @link http://docs.ckan.org/en/latest/api/index.html#ckan.logic.action.get.user_show
      */
-    public function user_show($id)
+    public function user_show($user_id)
     {
         $solr_request = [
-            'id' => $id
+            'id' => $user_id
         ];
         $data = json_encode($solr_request, JSON_PRETTY_PRINT);
 
@@ -386,7 +384,7 @@ class CkanClient
     }
 
     /**
-     * @param $id
+     * @param $package_id
      *
      * @return mixed
      *
@@ -395,10 +393,10 @@ class CkanClient
      * @throws \CKAN\NotFoundHttpException
      * @throws \Exception
      */
-    public function package_delete($id)
+    public function package_delete($package_id)
     {
         $solr_request = [
-            'id' => $id,
+            'id' => $package_id,
         ];
         $data = json_encode($solr_request, JSON_PRETTY_PRINT);
 
@@ -440,7 +438,7 @@ class CkanClient
     }
 
     /**
-     * @param             $id
+     * @param             $member_id
      * @param string $object_type ('user', 'package')
      * @param string|bool $capacity ('member', 'editor', 'admin', 'public', 'private')
      *
@@ -448,10 +446,10 @@ class CkanClient
      *
      * @link http://docs.ckan.org/en/latest/api/#ckan.logic.action.get.member_list
      */
-    public function member_list($id, $object_type = 'package', $capacity = false)
+    public function member_list($member_id, $object_type = 'package', $capacity = false)
     {
         $solr_request = [
-            'id' => $id
+            'id' => $member_id
         ];
         if ($object_type && ('none' != $object_type)) {
             $solr_request['object_type'] = $object_type;
@@ -509,9 +507,9 @@ class CkanClient
      */
     public function __destruct()
     {
-        if ($this->ch) {
-            curl_close($this->ch);
-            unset($this->ch);
+        if ($this->curl_handler) {
+            curl_close($this->curl_handler);
+            unset($this->curl_handler);
         }
     }
 }
