@@ -9,7 +9,7 @@ class OrganizationList
     /**
      * @var string
      */
-    private $jsonUrl = 'http://idm.data.gov/fed_agency.json';
+    private $jsonUrl = 'http://www.data.gov/app/themes/roots-nextdatagov/assets/Json/fed_agency.json';
 
     /**
      * @var mixed|null
