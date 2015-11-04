@@ -347,10 +347,11 @@ class CkanClient
      * @return mixed
      * @link http://docs.ckan.org/en/latest/api/index.html#ckan.logic.action.get.organization_show
      */
-    public function organization_show($organization_id)
+    public function organization_show($organization_id, $include_datasets = False)
     {
         $solr_request = [
-            'id' => $organization_id
+            'id' => $organization_id,
+            'include_datasets' => $include_datasets
         ];
         $data = json_encode($solr_request, JSON_PRETTY_PRINT);
 
