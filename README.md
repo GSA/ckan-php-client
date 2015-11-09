@@ -5,10 +5,7 @@ ckan-php-client
 [![Codacy Badge](https://api.codacy.com/project/badge/d052803756de41bfa51ef9a4d080a5da)](https://www.codacy.com/app/alexandr-perfilov/ckan-php-client)
 [![Join the chat at https://gitter.im/GSA/ckan-php-client](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/GSA/ckan-php-client?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-## API DOCs
-
-http://docs.ckan.org/en/latest/api/index.html
-
+Tiny CKAN API client written in PHP
 
 ## Requirements
 
@@ -63,3 +60,7 @@ Now you can add the autoloader, and you will have access to the library:
 
 Check [GSA/ckan-php-manager](https://github.com/GSA/ckan-php-manager/)
 script as an example
+
+## CKAN API DOCs
+
+http://docs.ckan.org/en/latest/api/index.html
