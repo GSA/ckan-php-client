@@ -169,10 +169,14 @@ class CkanClient
                     throw new NotFoundHttpException($data);
                     break;
                 default:
-                    throw new Exception(
-                        $info['http_code'] . ': ' .
-                        $this->http_status_codes[$info['http_code']] . PHP_EOL . $data . PHP_EOL . $url . PHP_EOL
-                    );
+                    if (isset($info['http_code'])) {
+                        throw new Exception(
+                            $info['http_code'] . ': ' .
+                            $this->http_status_codes[$info['http_code']] . PHP_EOL . $data . PHP_EOL . $url . PHP_EOL
+                        );
+                    } else {
+                        throw new Exception(serialize($info));
+                    }
             }
         }
 
@@ -234,7 +238,7 @@ class CkanClient
     public function tag_create($name, $vocabulary_id)
     {
         $data = [
-            'name'          => $name,
+            'name' => $name,
             'vocabulary_id' => $vocabulary_id,
         ];
         $data = json_encode($data, JSON_PRETTY_PRINT);
@@ -326,13 +330,20 @@ class CkanClient
     /**
      * Returns organization list
      *
+     * @param $all_fields bool
      *
      * @return mixed
      * @link http://docs.ckan.org/en/latest/api/index.html#ckan.logic.action.get.organization_list
      */
-    public function organization_list()
+    public function organization_list($all_fields = false)
     {
-
+        if ($all_fields) {
+            return $this->make_request(
+                'POST',
+                'action/organization_list',
+                json_encode(['all_fields' => true])
+            );
+        }
         return $this->make_request(
             'POST',
             'action/organization_list'
@@ -423,11 +434,11 @@ class CkanClient
     public function package_search($q = '', $fq = '', $rows = 100, $start = 0, $sort = 'score desc, name asc')
     {
         $solr_request = [
-            'q'     => $q,
-            'fq'    => $fq,
-            'rows'  => $rows,
+            'q' => $q,
+            'fq' => $fq,
+            'rows' => $rows,
             'start' => $start,
-            'sort'  => $sort
+            'sort' => $sort
         ];
         $data = json_encode($solr_request, JSON_PRETTY_PRINT);
 

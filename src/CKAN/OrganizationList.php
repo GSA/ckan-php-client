@@ -4,6 +4,10 @@ namespace CKAN;
 
 use Exception;
 
+/**
+ * Class OrganizationList
+ * @package CKAN
+ */
 class OrganizationList
 {
     /**
@@ -70,7 +74,9 @@ class OrganizationList
             if ($organization == trim($taxonomy['Federal Agency'])) {
                 if (!$taxonomy['Sub Agency']) {
 //                    let's put parent agency first
-                    define('PARENT_TERM', $taxonomy['unique id']);
+                    if (!defined('PARENT_TERM')) {
+                        define('PARENT_TERM', $taxonomy['unique id']);
+                    }
                     $parent[$taxonomy['unique id']] = $organization;
                 } else {
                     $return[$taxonomy['unique id']] = $taxonomy['Sub Agency'];
@@ -79,6 +85,35 @@ class OrganizationList
         }
 
         return array_merge($parent, $return);
+    }
+
+    /**
+     * @param $organization_term
+     * @return bool
+     */
+    public function getNameFor($organization_term)
+    {
+        $organization_name = false;
+        $organization_term = trim($organization_term);
+        foreach ($this->json['taxonomies'] as $taxonomy) {
+            if ($taxonomy['taxonomy']['unique id'] !== $taxonomy['taxonomy']['term']) {
+//                skip 3rd level children
+                continue;
+            }
+//            if ($organization_term == trim($taxonomy['taxonomy']['Federal Agency'])) {
+            if ($organization_term == trim($taxonomy['taxonomy']['unique id'])) {
+                if ('' == trim($taxonomy['taxonomy']['Sub Agency'])) {
+                    $organization_name = $taxonomy['taxonomy']['Federal Agency'];
+                    break;
+                }
+            }
+//            if ($organization_term == trim($taxonomy['taxonomy']['Sub Agency'])) {
+//                $organization_name = $taxonomy['taxonomy']['unique id'];
+//                break;
+//            }
+        }
+
+        return $organization_name;
     }
 
     /**
