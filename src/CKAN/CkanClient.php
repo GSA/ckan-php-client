@@ -374,6 +374,30 @@ class CkanClient
     }
 
     /**
+     * Return a user’s public activity stream.
+     * You must be authorized to view the user’s profile.
+     *
+     * @param $user_id
+     * @return mixed
+     * @throws Exception
+     * @throws NotFoundHttpException
+     * @link http://docs.ckan.org/en/latest/api/index.html#ckan.logic.action.get.user_activity_list
+     */
+    public function user_activity_list($user_id)
+    {
+        $solr_request = [
+            'id' => $user_id
+        ];
+        $data = json_encode($solr_request, JSON_PRETTY_PRINT);
+
+        return $this->make_request(
+            'POST',
+            'action/user_activity_list',
+            $data
+        );
+    }
+
+    /**
      * Returns user with matching id or name
      *
      * @param string $user_id (id/name)
