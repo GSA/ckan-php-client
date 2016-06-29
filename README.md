@@ -9,7 +9,7 @@ Tiny CKAN API client written in PHP
 
 ## Requirements
 
-* PHP 5.4+ : <http://php.net>
+* PHP 5.6+ : <http://php.net>
 
 ## Installation
 
