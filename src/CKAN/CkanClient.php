@@ -46,6 +46,7 @@ class CkanClient
         '200' => 'OK',
         '301' => 'Moved Permanently',
         '400' => 'Bad Request',
+        '401' => 'Unauthorized',
         '403' => 'Not Authorized',
         '404' => 'Not Found',
         '409' => 'Conflict (e.g. name already exists)',
