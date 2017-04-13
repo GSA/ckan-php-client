@@ -445,6 +445,54 @@ class CkanClient
     }
 
     /**
+     * @param $organization_id
+     *
+     * @return mixed
+     *
+     * @link http://docs.ckan.org/en/latest/api/#ckan.logic.action.delete.organization_delete
+     *
+     * @throws \CKAN\NotFoundHttpException
+     * @throws \Exception
+     */
+    public function organization_delete($organization_id)
+    {
+        $solr_request = [
+            'id' => $organization_id,
+        ];
+        $data = json_encode($solr_request, JSON_PRETTY_PRINT);
+
+        return $this->make_request(
+            'POST',
+            'action/organization_delete',
+            $data
+        );
+    }
+
+    /**
+     * @param $organization_id
+     *
+     * @return mixed
+     *
+     * @link http://docs.ckan.org/en/latest/api/#ckan.logic.action.purge.organization_purge
+     *
+     * @throws \CKAN\NotFoundHttpException
+     * @throws \Exception
+     */
+    public function organization_purge($organization_id)
+    {
+        $solr_request = [
+            'id' => $organization_id,
+        ];
+        $data = json_encode($solr_request, JSON_PRETTY_PRINT);
+
+        return $this->make_request(
+            'POST',
+            'action/organization_purge',
+            $data
+        );
+    }
+
+    /**
      * Searches for packages satisfying a given search criteria
      *
      * @param        $q
@@ -535,6 +583,25 @@ class CkanClient
         return $this->make_request(
             'POST',
             'action/package_update',
+            $data
+        );
+    }
+
+    /**
+     * patch a organization
+     *
+     * @param $data
+     *
+     * @return mixed
+     * @link http://docs.ckan.org/en/latest/api/index.html#ckan.logic.action.patch.organization_patch
+     */
+    public function organization_patch(array $data)
+    {
+        $data = json_encode($data, JSON_PRETTY_PRINT);
+
+        return $this->make_request(
+            'POST',
+            'action/organization_patch',
             $data
         );
     }
