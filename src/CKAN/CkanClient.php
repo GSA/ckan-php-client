@@ -43,6 +43,7 @@ class CkanClient
      * @var        array
      */
     private $http_status_codes = [
+        '100' => 'Continue',
         '200' => 'OK',
         '301' => 'Moved Permanently',
         '400' => 'Bad Request',
@@ -139,6 +140,8 @@ class CkanClient
      */
     private function make_request($method, $uri, $data = null)
     {
+        timer();
+        echo $uri.PHP_EOL;
         $method = strtoupper($method);
         if (!in_array($method, ['GET', 'POST'])) {
             throw new Exception('Method ' . $method . ' is not supported');
