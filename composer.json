@@ -22,5 +22,9 @@
     "ext-curl": "*",
     "ext-json": "*",
     "phpunit/phpunit": "*"
+  },
+  "require-dev": {
+    "doctrine/instantiator": "1.0.5",
+    "phpunit/phpunit": "~4.8|~5.7"
   }
 }
