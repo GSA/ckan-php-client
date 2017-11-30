@@ -13,7 +13,7 @@ class OrganizationList
     /**
      * @var string
      */
-    private $jsonUrl = 'http://www.data.gov/app/themes/roots-nextdatagov/assets/Json/fed_agency.json';
+    private $jsonUrl = 'https://www.data.gov/app/themes/roots-nextdatagov/assets/Json/fed_agency.json';
 
     /**
      * @var mixed|null
@@ -66,11 +66,6 @@ class OrganizationList
 
             $taxonomy = $tx['taxonomy'];
 
-            if ($taxonomy['unique id'] !== $taxonomy['term']) {
-//                skip 3rd level children
-                continue;
-            }
-
             if ($organization == trim($taxonomy['Federal Agency'])) {
                 if (!$taxonomy['Sub Agency']) {
 //                    let's put parent agency first
@@ -81,10 +76,17 @@ class OrganizationList
                 } else {
                     $return[$taxonomy['unique id']] = $taxonomy['Sub Agency'];
                 }
+            } elseif ($organization == trim($taxonomy['term'])) {
+              $return[$taxonomy['unique id']] = $organization;
             }
         }
 
-        return array_merge($parent, $return);
+        $result = array_merge($parent, $return);
+        if (!$result) {
+          echo "ERROR: Could not find organization: ".$organization.PHP_EOL;
+        }
+
+        return $result;
     }
 
     /**
